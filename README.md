@@ -22,15 +22,17 @@ project
 │
 ├── tests/
 │    ├── conftest.py       # Фикстуры и настройки для тестов
-│    └── test_posts.py     # Тесты для эндпоинта /posts
-├── README.md
+│    └── test_posts.py     # Тесты для эндпоинтов GET, POST, PUT, DELETE
 ├── requirements.txt
-└── .gitignore
+├── Dockerfile
+├── .dockerignore
+├── .gitignore
+└── README.md
 ```
 
 ## Требования
 
-- Python 3.12
+- Python 3.8+
 - Доступ в интернет 
 
 
@@ -60,43 +62,56 @@ project
   pip install -r requirements.txt
   ```
 
-
 ##  Запуск тестов
+  ```
+  pytest                          # Все тесты
+  pytest -v                       # Подробный вывод
+  pytest -k "nonexistent"         # Только негативные тесты
+  ```
 
-### Запуск всех тестов
+## Ожидаемый результат (Пример)
+  ```
+============================= test session starts ==============================
+platform linux -- Python 3.11.16, pytest-9.1.1, pluggy-1.6.0 -- /usr/local/bin/python3.11
+cachedir: .pytest_cache
+rootdir: /project
+collecting ... collected 14 items
 
-```bash
-pytest
-```
+tests/test_posts.py::TestPosts::test_get_all_posts PASSED                [  7%]
+tests/test_posts.py::TestPosts::test_get_post_by_id[existing_post_5] PASSED [ 21%]
+tests/test_posts.py::TestPosts::test_get_post_by_id[existing_post_100] PASSED [ 28%]
+tests/test_posts.py::TestPosts::test_get_post_by_id[nonexistent_post] PASSED [ 35%]
+tests/test_posts.py::TestPosts::test_create_post[simple_post] PASSED     [ 42%]
+tests/test_posts.py::TestPosts::test_create_post[unicode_post] PASSED    [ 50%]
+tests/test_posts.py::TestPosts::test_create_post[long_content] PASSED    [ 57%]
+tests/test_posts.py::TestPosts::test_update_post[update_existing_1] PASSED [ 64%]
+tests/test_posts.py::TestPosts::test_update_post[update_existing_5] PASSED [ 71%]
+tests/test_posts.py::TestPosts::test_update_post[update_nonexistent] PASSED [ 78%]
+tests/test_posts.py::TestPosts::test_delete_post PASSED                  [ 85%]
+tests/test_posts.py::TestPosts::test_get_nonexistent_post_returns_404 PASSED [ 92%]
+tests/test_posts.py::TestPosts::test_post_with_invalid_payload PASSED    [100%]
 
-### Запуск с подробным выводом
+============================== 14 passed in 5.45s ==============================
+  ```
 
-```bash
-pytest -v
-```
 
-### Запуск только тестов из класса `TestPosts`
+## Установка Через Docker (рекомендуется)
 
-```bash
-pytest tests/test_posts.py::TestPosts -v
-```
+### 1. Сборка образа
 
-### Запуск конкретного теста по имени
+  ```
+  docker build -t rest-api-tests .
+  ```
 
-```bash
-pytest tests/test_posts.py::TestPosts::test_get_all_posts -v
-```
+### 2. Запуск всех тестов
 
-### Запуск с отображением print-вывода
+  ```
+  docker run --rm rest-api-tests  
+  ```
 
-```bash
-pytest -v -s
-```
 
-### Запуск только негативных тестов (по маркеру в имени)
-
-```bash
-pytest -v -k "nonexistent or invalid"
-```
-
-## Ожидаемый результат
+## Автор
+- Владислав
+- telegram: @vlad_705
+- [e-mail](vlad.prickly@gmail.com)
+- [github.com](https://github.com/VladPrickly)
